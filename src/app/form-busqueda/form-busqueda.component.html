@@ -1,3 +1,77 @@
-<p>
-  form-busqueda works!
-</p>
+<!-- <div class="row" >
+  <ul class="col m3">
+    <li class="card-panel teal lighten-2">Nombre</li>
+    <li *ngFor="let nombre of Socios" > {{nombre.c_nombre}}</li>    
+  </ul>
+ <ul class="col m3" >
+    <li class="card-panel teal lighten-2">Corporativo</li>
+    <li *ngFor="let corp of Socios" > {{corp.c_Corporativo}}</li>
+  
+  
+ </ul>
+ <ul class="col m3">
+    <li class="card-panel teal lighten-2">Linea de Negocio</li>
+   <li *ngFor="let ln of Socios"> {{ln.c_Lineanegocio}}</li>
+  </ul>
+  <ul class="col m3">
+      <li class="card-panel teal lighten-2">Estado</li>
+      <li *ngFor="let edo of Socios" > {{edo.c_Estadof}}</li>
+  </ul> 
+</div> -->
+
+<mat-grid-list cols="4" rowHeight="fit">  
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Código de Socio" [(ngModel)]="codigo">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Línea de Negocio" [(ngModel)]="clasificacion">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [matDatepicker]="fechaInicio" placeholder="Fecha de Inicio" [(ngModel)]="fechaIni">
+        <mat-datepicker-toggle matSuffix [for]="fechaInicio"></mat-datepicker-toggle>
+        <mat-datepicker #fechaInicio></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [matDatepicker]="fechaFinal" placeholder="Fecha de Corte" [(ngModel)]="fechaFin">
+        <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
+        <mat-datepicker #fechaFinal></mat-datepicker>
+    </mat-form-field>
+</mat-grid-list>  
+
+<button type="button" (click)="getDatos()">Buscar</button>
+<!-- tabla -->
+
+
+<table *ngIf="mostrar">
+  <thead>
+    <tr>
+        <th>Número de Socio</th>
+        <th>Nombre  </th>
+        <th>Código de Prueba LANS</th>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Precio Unitario</th>
+        <th>Subtotal</th>
+        <th>IVA</th>
+        <th>Total</th>
+        <th>Total del Periodo</th>
+        <th>Descuento por Periodo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let socio of Socios">
+      <td>{{socio.c_codigo}}</td>
+      <td>{{socio.c_nombre}}</td>
+      <td>Código Lans</td>
+      <td>Descripción prueba lans</td>
+      <td>Cantidad</td>
+      <td>Precio Unitario</td>
+      <td>Subtotal</td>
+      <td>IVA</td>
+      <td>TOTAL</td>
+      <td>TOTAL DEL PERIODO</td>
+      <td>DESCUENTO POR PERIODO</td>
+    </tr>
+  </tbody>
+</table>
