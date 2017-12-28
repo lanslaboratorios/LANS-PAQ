@@ -63,15 +63,15 @@
     <tr *ngFor="let socio of Socios">
       <td>{{socio.c_codigo}}</td>
       <td>{{socio.c_nombre}}</td>
-      <td>Código Lans</td>
-      <td>Descripción prueba lans</td>
-      <td>Cantidad</td>
-      <td>Precio Unitario</td>
-      <td>Subtotal</td>
-      <td>IVA</td>
-      <td>TOTAL</td>
-      <td>TOTAL DEL PERIODO</td>
-      <td>DESCUENTO POR PERIODO</td>
+      <td>{{socio.CodigoEstudio}}</td>
+      <td>{{socio.NombreEstudio}}</td>
+      <td>{{socio.Cantidad}}</td>
+      <td>{{socio.Subtotal}}</td>
+      <td>{{socio.Stotal}}</td>
+      <td>{{socio.IVA}}</td>
+      <td>{{socio.Total}}</td>
+      <td>{{socio.TotalFactura}}</td>
+      <td>{{socio.Descuento}}</td>
     </tr>
   </tbody>
 </table>

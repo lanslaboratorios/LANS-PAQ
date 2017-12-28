@@ -1,3 +1,4 @@
 export class Socio {
-    // Nombre Corporativo Linea Negocio Estado
+  c_codigo;
+  TotalFactura;
   }
