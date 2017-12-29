@@ -98,8 +98,11 @@ export class FormBusquedaComponent implements OnInit {
     let subtotal:number=0;
     let iva:number=0;
     let total:number=0;
-    let desc,dto,totalsoc:number=0;
+    let desc= 0;
+    let totalsoc:number=0;
     let cambioSocio:boolean=false;
+    let acumDescPer:number=0;
+
     for (let i = 1;i<s.length;i++ ) {
       if(i==s.length-1){
         this.banderin=true;
@@ -113,12 +116,14 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i-1]['Descuento']*cantidad;
-        dto=Math.round((desc) * 100) / 100;
+        acumDescPer += desc;
+
         s[i-1].Cantidad=cantidad;
         s[i-1].Stotal=subtotal;
         s[i-1].IVA=iva;
         s[i-1].Total=total;
-        s[i-1].Descuento=dto;
+        s[i-1].Descuento=desc;
+        s[i-1].DescuentoPeriodo = 0;
         s[i-1].TotalFactura=0;
         this.condensado.push(s[i-1]);
         cantidad=1;
@@ -133,16 +138,19 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i-1]['Descuento']*cantidad;
-        dto=Math.round((desc) * 100) / 100;
+        acumDescPer += desc;
+
         s[i-1].Cantidad=cantidad;
         s[i-1].Stotal=subtotal;
         s[i-1].IVA=iva;
         s[i-1].Total=total;
-        s[i-1].Descuento=dto;
+        s[i-1].Descuento=desc;
+        s[i-1].DescuentoPeriodo=acumDescPer;
         s[i-1].TotalFactura=totalsoc;
         this.condensado.push(s[i-1]);
         cantidad=1;
         totalsoc=0;
+        acumDescPer=0;
       }
       if(this.banderin){
         if(cambioSocio){
@@ -151,12 +159,14 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i]['Descuento']*cantidad;
-        dto=Math.round((desc) * 100) / 100;
+        acumDescPer = desc;
+
         s[i].Cantidad=cantidad;
         s[i].Stotal=subtotal;
         s[i].IVA=iva;
         s[i].Total=total;
-        s[i].Descuento=dto;
+        s[i].Descuento=desc;
+        s[i].DescuentoPeriodo=acumDescPer;
         s[i].TotalFactura=totalsoc;
         this.condensado.push(s[i]);
         //cantidad=1;
@@ -167,16 +177,17 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i]['Descuento']*cantidad;
-        dto=Math.round((desc) * 100) / 100;
+        acumDescPer = desc;
+
         s[i].Cantidad=cantidad;
         s[i].Stotal=subtotal;
         s[i].IVA=iva;
         s[i].Total=total;
-        s[i].Descuento=dto;
+        s[i].Descuento=desc;
+        s[i].DescuentoPeriodo=acumDescPer;
         s[i].TotalFactura=totalsoc;
         this.condensado.push(s[i]);
-        // cantidad=1;
-        // totalsoc=0;
+
         }
 
       }
