@@ -159,7 +159,7 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i]['Descuento']*cantidad;
-        acumDescPer = desc;
+        acumDescPer += desc;
 
         s[i].Cantidad=cantidad;
         s[i].Stotal=subtotal;
@@ -177,7 +177,7 @@ export class FormBusquedaComponent implements OnInit {
         total=Math.round((subtotal+iva) * 100) / 100;
         totalsoc+=total;
         desc=s[i]['Descuento']*cantidad;
-        acumDescPer = desc;
+        acumDescPer += desc;
 
         s[i].Cantidad=cantidad;
         s[i].Stotal=subtotal;
