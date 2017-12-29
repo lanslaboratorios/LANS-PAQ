@@ -24,11 +24,12 @@ export class FormBusquedaComponent implements OnInit {
   
   Socios: Socio[];
   clasificacion: String;
-  fechaIni: Date;
-  fechaFin: Date;
+  fechaIni;
+  fechaFin;
   codigo: String;
   mostrar:Boolean;
   condensado:Socio[]=[];
+  banderin:Boolean=false;
 
   ngOnInit() {   
     this.mostrar=false;
@@ -43,18 +44,18 @@ export class FormBusquedaComponent implements OnInit {
       if(this.clasificacion==null  || this.clasificacion == undefined || this.clasificacion == ""){
         if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){alert("Inserta almenos 1 parámetro de busqueda");return}
         else{query=`Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
-      }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){      
-      query=`Select * from DetalleFacturacion_View where c_Lineanegocio=${this.clasificacion} order by c_codigo, CodigoEstudio`
-      }else{`Select * from DetalleFacturacion_View where c_Lineanegocio=${this.clasificacion} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
+      }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){      
+      query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
+      }else{`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
     }else if(this.clasificacion==null || this.clasificacion==undefined || this.clasificacion == ""){
       if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
         query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`
       }
       else{query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}     
     }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
-      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio=${this.clasificacion} order by c_codigo, CodigoEstudio`
+      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
     }else{
-      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio=${this.clasificacion} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
+      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
     }
       console.log(query)
      this.conector.getSocios(query)
@@ -92,6 +93,9 @@ export class FormBusquedaComponent implements OnInit {
     let desc,dto,totalsoc:number=0;
     let cambioSocio:boolean=false;
     for (let i = 1;i<s.length;i++ ) {
+      if(i==s.length-1){
+        this.banderin=true;
+      }
       if(s[i]['CodigoEstudio']==s[i-1]['CodigoEstudio'] && s[i-1]['c_codigo']==s[i]['c_codigo']){
         cantidad++;
       //console.log(`Igual: ${s[i]['CodigoEstudio']}`); 
@@ -107,26 +111,78 @@ export class FormBusquedaComponent implements OnInit {
         s[i-1].IVA=iva;
         s[i-1].Total=total;
         s[i-1].Descuento=dto;
-        s[i-1].TotalFactura="";
+        s[i-1].TotalFactura=0;
         this.condensado.push(s[i-1]);
-        cantidad=1;}
+        cantidad=1;
+      }
       else{
         cambioSocio=true;
-        for(let x = 0; x<this.condensado.length;x++){
-          if(this.condensado[x]['c_codigo']==s[i-1]['c_codigo']){
-            this.condensado[x].TotalFactura=totalsoc;
-          }
-        }
+        totalsoc=0;
+      }
+      if (cambioSocio){
+        subtotal=s[i-1]['Subtotal']*cantidad;
+        iva=Math.round((subtotal*.16) * 100) / 100;
+        total=Math.round((subtotal+iva) * 100) / 100;
+        totalsoc+=total;
+        desc=s[i-1]['Descuento']*cantidad;
+        dto=Math.round((desc) * 100) / 100;
+        s[i-1].Cantidad=cantidad;
+        s[i-1].Stotal=subtotal;
+        s[i-1].IVA=iva;
+        s[i-1].Total=total;
+        s[i-1].Descuento=dto;
+        s[i-1].TotalFactura=totalsoc;
+        this.condensado.push(s[i-1]);
+        cantidad=1;
+        //totalsoc=0;
       }
       if(!cambioSocio){
         for(let x = 0; x<this.condensado.length;x++){
           if(this.condensado[x]['c_codigo']==s[i-1]['c_codigo']){
             this.condensado[x].TotalFactura=totalsoc;
+            
           }
         }
       }
-    
-    };
+      if(this.banderin){
+        if(cambioSocio){
+        subtotal=s[i]['Subtotal']*cantidad;
+        iva=Math.round((subtotal*.16) * 100) / 100;
+        total=Math.round((subtotal+iva) * 100) / 100;
+        totalsoc+=total;
+        desc=s[i]['Descuento']*cantidad;
+        dto=Math.round((desc) * 100) / 100;
+        s[i].Cantidad=cantidad;
+        s[i].Stotal=subtotal;
+        s[i].IVA=iva;
+        s[i].Total=total;
+        s[i].Descuento=dto;
+        s[i].TotalFactura=totalsoc;
+        this.condensado.push(s[i]);
+        //cantidad=1;
+
+        }else{
+        subtotal=s[i]['Subtotal']*cantidad;
+        iva=Math.round((subtotal*.16) * 100) / 100;
+        total=Math.round((subtotal+iva) * 100) / 100;
+        totalsoc+=total;
+        desc=s[i]['Descuento']*cantidad;
+        dto=Math.round((desc) * 100) / 100;
+        s[i].Cantidad=cantidad;
+        s[i].Stotal=subtotal;
+        s[i].IVA=iva;
+        s[i].Total=total;
+        s[i].Descuento=dto;
+        s[i].TotalFactura=totalsoc;
+        this.condensado.push(s[i]);
+        // cantidad=1;
+        // totalsoc=0;
+        }
+
+      }
+      cambioSocio=false;
+     console.log(`totalsoc  ${totalsoc}`)
+    }
   }
 
 }
