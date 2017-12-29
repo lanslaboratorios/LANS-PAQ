@@ -1,13 +1,13 @@
 <!-- <div class="row" >
   <ul class="col m3">
     <li class="card-panel teal lighten-2">Nombre</li>
-    <li *ngFor="let nombre of Socios" > {{nombre.c_nombre}}</li>    
+    <li *ngFor="let nombre of Socios" > {{nombre.c_nombre}}</li>
   </ul>
  <ul class="col m3" >
     <li class="card-panel teal lighten-2">Corporativo</li>
     <li *ngFor="let corp of Socios" > {{corp.c_Corporativo}}</li>
-  
-  
+
+
  </ul>
  <ul class="col m3">
     <li class="card-panel teal lighten-2">Linea de Negocio</li>
@@ -16,10 +16,10 @@
   <ul class="col m3">
       <li class="card-panel teal lighten-2">Estado</li>
       <li *ngFor="let edo of Socios" > {{edo.c_Estadof}}</li>
-  </ul> 
+  </ul>
 </div> -->
 
-<mat-grid-list cols="4" rowHeight="fit">  
+<mat-grid-list cols="4" rowHeight="fit" *ngIf="disponible">
     <mat-form-field class="example-full-width">
         <input matInput placeholder="Código de Socio" [(ngModel)]="codigo">
     </mat-form-field>
@@ -36,13 +36,15 @@
         <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
         <mat-datepicker #fechaFinal></mat-datepicker>
     </mat-form-field>
-</mat-grid-list>  
+</mat-grid-list>
 
-<button type="button" (click)="getDatos()">Buscar</button>
+<button class="btnFormulario" *ngIf="disponible" type="button" (click)="getDatos()">Buscar</button>
+<button class="btnFormulario" *ngIf="!disponible" type="button" (click)="refVentana()">Nueva Busqueda</button>
 <!-- tabla -->
 
 
 <table *ngIf="mostrar">
+
   <thead>
     <tr>
         <th>Número de Socio</th>
@@ -59,19 +61,20 @@
     </tr>
   </thead>
 
-  <tbody>
-    <tr *ngFor="let socio of Socios">
-      <td>{{socio.c_codigo}}</td>
-      <td>{{socio.c_nombre}}</td>
-      <td>{{socio.CodigoEstudio}}</td>
-      <td>{{socio.NombreEstudio}}</td>
-      <td>{{socio.Cantidad}}</td>
-      <td>{{socio.Subtotal}}</td>
-      <td>{{socio.Stotal}}</td>
-      <td>{{socio.IVA}}</td>
-      <td>{{socio.Total}}</td>
-      <td>{{socio.TotalFactura}}</td>
-      <td>{{socio.Descuento}}</td>
-    </tr>
-  </tbody>
+    <tbody >
+      <tr *ngFor="let socio of Socios">
+        <td>{{socio.c_codigo}}</td>
+        <td>{{socio.c_nombre}}</td>
+        <td>{{socio.CodigoEstudio}}</td>
+        <td>{{socio.NombreEstudio}}</td>
+        <td>{{socio.Cantidad}}</td>
+        <td>{{socio.Subtotal}}</td>
+        <td>{{socio.Stotal}}</td>
+        <td>{{socio.IVA}}</td>
+        <td>{{socio.Total}}</td>
+        <td>{{socio.TotalFactura}}</td>
+        <td>{{socio.Descuento}}</td>
+      </tr>
+    </tbody>
+
 </table>

@@ -19,39 +19,46 @@ export class FormBusquedaComponent implements OnInit {
 
   constructor( private conector : ConectorGilService ) {
 
-    
+
    }
-  
+
   Socios: Socio[];
   clasificacion: String;
   fechaIni;
   fechaFin;
   codigo: String;
   mostrar:Boolean;
+  disponible:Boolean;
   condensado:Socio[]=[];
   banderin:Boolean=false;
 
-  ngOnInit() {   
+  ngOnInit() {
     this.mostrar=false;
+    this.disponible=true;
 
   }
-  
+
+  refVentana():void{
+    location.reload();
+  }
+
   getDatos(): void {
     this.condensado=[];
     this.Socios=[];
+    this.disponible=false;
     let query:String;
     if(this.codigo == null || this.codigo == undefined || this.codigo == ""){
       if(this.clasificacion==null  || this.clasificacion == undefined || this.clasificacion == ""){
         if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){alert("Inserta almenos 1 parámetro de busqueda");return}
         else{query=`Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
-      }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){      
+      }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){
       query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
       }else{query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
     }else if(this.clasificacion==null || this.clasificacion==undefined || this.clasificacion == ""){
       if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
         query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`
       }
-      else{query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}     
+      else{query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
     }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
       query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
     }else{
@@ -63,11 +70,11 @@ export class FormBusquedaComponent implements OnInit {
       //console.dir(this.Socios);
       socios=this.manipulaDatos(socios); //Función para formatear Datos
       this.Socios = socios;
-    
-      
-    
+
+
+
     })
-     this.mostrar=true; 
+     this.mostrar=true;
   }
   parseDate(fecha:Date):String{
     if(fecha.getDate().toString().length == 1){var dia = '0'+fecha.getDate();}
@@ -76,7 +83,7 @@ export class FormBusquedaComponent implements OnInit {
     else{var mes = (fecha.getMonth()+1).toString()}
     let fechaSQL=`${fecha.getFullYear()}-${mes}-${dia}`
     return fechaSQL;
-  } 
+  }
 
   manipulaDatos(socios:Socio[]):Socio[]{
 
@@ -99,7 +106,7 @@ export class FormBusquedaComponent implements OnInit {
       }
       if(s[i]['CodigoEstudio']==s[i-1]['CodigoEstudio'] && s[i-1]['c_codigo']==s[i]['c_codigo']){
         cantidad++;
-      //console.log(`Igual: ${s[i]['CodigoEstudio']}`); 
+      //console.log(`Igual: ${s[i]['CodigoEstudio']}`);
       }else if(s[i-1]['c_codigo']==s[i]['c_codigo']){
         subtotal=s[i-1]['Subtotal']*cantidad;
         iva=Math.round((subtotal*.16) * 100) / 100;
@@ -118,7 +125,7 @@ export class FormBusquedaComponent implements OnInit {
       }
       else{
         cambioSocio=true;
-        
+
       }
       if (cambioSocio){
         subtotal=s[i-1]['Subtotal']*cantidad;
