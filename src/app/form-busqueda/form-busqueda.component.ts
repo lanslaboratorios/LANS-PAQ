@@ -46,7 +46,7 @@ export class FormBusquedaComponent implements OnInit {
         else{query=`Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
       }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){      
       query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
-      }else{`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
+      }else{query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
     }else if(this.clasificacion==null || this.clasificacion==undefined || this.clasificacion == ""){
       if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
         query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`
@@ -86,6 +86,7 @@ export class FormBusquedaComponent implements OnInit {
   }
 
   detectarCoincidencias(s): void{
+    this.condensado=[];
     let cantidad:number=1;
     let subtotal:number=0;
     let iva:number=0;
@@ -117,7 +118,7 @@ export class FormBusquedaComponent implements OnInit {
       }
       else{
         cambioSocio=true;
-        totalsoc=0;
+        
       }
       if (cambioSocio){
         subtotal=s[i-1]['Subtotal']*cantidad;
@@ -134,15 +135,7 @@ export class FormBusquedaComponent implements OnInit {
         s[i-1].TotalFactura=totalsoc;
         this.condensado.push(s[i-1]);
         cantidad=1;
-        //totalsoc=0;
-      }
-      if(!cambioSocio){
-        for(let x = 0; x<this.condensado.length;x++){
-          if(this.condensado[x]['c_codigo']==s[i-1]['c_codigo']){
-            this.condensado[x].TotalFactura=totalsoc;
-            
-          }
-        }
+        totalsoc=0;
       }
       if(this.banderin){
         if(cambioSocio){
@@ -181,8 +174,9 @@ export class FormBusquedaComponent implements OnInit {
 
       }
       cambioSocio=false;
-     console.log(`totalsoc  ${totalsoc}`)
+     //console.log(`totalsoc  ${totalsoc}`)
     }
+    //totalsoc = 0;
   }
 
 }
