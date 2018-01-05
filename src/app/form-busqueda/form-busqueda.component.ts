@@ -49,7 +49,7 @@ export class FormBusquedaComponent implements OnInit {
     let query:String;
     if(this.codigo == null || this.codigo == undefined || this.codigo == ""){
       if(this.clasificacion==null  || this.clasificacion == undefined || this.clasificacion == ""){
-        if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){alert("Inserta almenos 1 parámetro de busqueda");return}
+        if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){alert("Inserta almenos 1 parámetro de busqueda"); this.disponible=true;return}
         else{query=`Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
       }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){
       query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
