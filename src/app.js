@@ -25,12 +25,12 @@ app.use(function (req, res, next) {
   next(err)
 })
 if (app.get('env') === 'development') {
-  app.listen(3000, function () {
-    console.log('Example listening on port 3000!')
+  app.listen(3001, function () {
+    console.log('dev on port 3000!')
   })
 } else {
   app.listen(3001, function () {
-    console.log('listening on port 3001!')
+    console.log('prod on port 3001!')
   })
 }
 module.exports = app
