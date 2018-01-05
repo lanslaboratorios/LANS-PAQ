@@ -92,6 +92,34 @@ export class FormBusquedaComponent implements OnInit {
     return socios
   }
 
+  exportTableToCSV(filename) {
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(`"${cols[j].innerHTML}"`);
+        
+        csv.push(row.join(","));        
+    }
+
+    // Download CSV file
+    this.downloadCSV(csv.join("\n"), filename);
+}
+
+  downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    var link = window.document.createElement("a");
+    link.setAttribute("href", "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(csv));
+    link.setAttribute("download", filename);
+    link.click();
+  
+}
+
   detectarCoincidencias(s): void{
     this.condensado=[];
     let cantidad:number=1;

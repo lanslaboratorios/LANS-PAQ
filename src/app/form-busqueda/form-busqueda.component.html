@@ -40,6 +40,7 @@
 
 <button class="btnFormulario" *ngIf="disponible" type="button" (click)="getDatos()">Buscar</button>
 <button class="btnFormulario" *ngIf="!disponible" type="button" (click)="refVentana()">Nueva Busqueda</button>
+<button class="btnFormulario" *ngIf="!disponible" type="button" (click)="exportTableToCSV('datos.csv')">Descargar CSV</button>
 <!-- tabla -->
 
 
