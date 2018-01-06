@@ -5,13 +5,13 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin':'*' })
 };
 
 @Injectable()
 export class ConectorGilService {
 
-  private apiURL = 'http://192.168.1.13:3000/ConsultaLabCore';
+  private apiURL = 'http://192.168.1.6:3000/ConsultaLabCore';
 
   constructor(private http:HttpClient) {}
 
