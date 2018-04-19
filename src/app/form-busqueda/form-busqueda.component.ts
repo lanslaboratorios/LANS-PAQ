@@ -6,9 +6,10 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule } from '@angular/material';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { log } from 'util';
 
-//declare var $:any;
+
 
 @Component({
   selector: 'form-busqueda',
@@ -17,7 +18,7 @@ import { log } from 'util';
 })
 export class FormBusquedaComponent implements OnInit {
 
-  constructor( private conector : ConectorGilService ) {
+  constructor( private conector: ConectorGilService ) {
 
 
    }
@@ -31,51 +32,97 @@ export class FormBusquedaComponent implements OnInit {
   disponible:Boolean;
   condensado:Socio[]=[];
   banderin:Boolean=false;
+  facturado;
 
   ngOnInit() {
-    this.mostrar=false;
-    this.disponible=true;
+    this.mostrar = false;
+    this.disponible = true;
 
   }
 
-  refVentana():void{
+  refVentana():void {
     location.reload();
   }
 
   getDatos(): void {
-    this.condensado=[];
-    this.Socios=[];
-    this.disponible=false;
+    this.condensado = [];
+    this.Socios = [];
+    this.disponible = false;
     let query:String;
-    if(this.codigo == null || this.codigo == undefined || this.codigo == ""){
-      if(this.clasificacion==null  || this.clasificacion == undefined || this.clasificacion == ""){
-        if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){alert("Inserta almenos 1 parámetro de busqueda"); this.disponible=true;return}
-        else{query=`Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
-      }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined || this.fechaIni=="" || this.fechaFin==""){
-      query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
-      }else{query=`Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
-    }else if(this.clasificacion==null || this.clasificacion==undefined || this.clasificacion == ""){
-      if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
-        query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`
+    if( !this.facturado) {
+      if(this.codigo == null || this.codigo === undefined || this.codigo === ''){
+        if(this.clasificacion === null  || this.clasificacion === undefined || this.clasificacion === '') {
+          if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+            alert('Inserta almenos 1 parámetro de busqueda'); this.disponible = true; return; 
+          }else {
+            query = `Select * from DetalleFacturacion_View where Fecha >= '${this.parseDate(this.fechaIni)}'
+            and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
+          }
+      }else
+        if (this.fechaIni == null || this.fechaIni === undefined ||
+          this.fechaFin == null || this.fechaFin === undefined || this.fechaIni === '' || this.fechaFin === '') {
+        query = `Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`;
+        }else {
+          query = `Select * from DetalleFacturacion_View where c_Lineanegocio='${this.clasificacion}' 
+          and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
+      }else if(this.clasificacion == null || this.clasificacion === undefined || this.clasificacion === '') {
+        if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+          query = `Select * from DetalleFacturacion_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`;
+        }else {
+          query = `Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}
+          ' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`; }
+      }else
+        if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+        query = `Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}
+        ' order by c_codigo, CodigoEstudio`;
+      }else {
+        query = `Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}
+        ' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
       }
-      else{query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`}
-    }else if(this.fechaIni==null || this.fechaIni==undefined || this.fechaFin==null || this.fechaFin==undefined){
-      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`
-    }else{
-      query=`Select * from DetalleFacturacion_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
+      this.conector.getSocios(query)
+      .subscribe(socios => {
+        socios = this.manipulaDatos(socios); // Función para formatear Datos
+        this.Socios = socios;
+      });
+    }else {
+      if(this.codigo == null || this.codigo === undefined || this.codigo === ''){
+        if(this.clasificacion === null  || this.clasificacion === undefined || this.clasificacion === '') {
+          if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+            alert('Inserta almenos 1 parámetro de busqueda'); this.disponible = true; return; 
+          }else {
+            query = `Select * from DetalleFacturacionFull_View where Fecha >= '${this.parseDate(this.fechaIni)}'
+            and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`;
+          }
+      }else
+        if (this.fechaIni == null || this.fechaIni === undefined ||
+          this.fechaFin == null || this.fechaFin === undefined || this.fechaIni === '' || this.fechaFin === '') {
+        query = `Select * from DetalleFacturacionFull_View where c_Lineanegocio='${this.clasificacion}' order by c_codigo, CodigoEstudio`;
+        }else {
+          query = `Select * from DetalleFacturacionFull_View where c_Lineanegocio='${this.clasificacion}' and Fecha >= '
+          ${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`;}
+      }else if(this.clasificacion == null || this.clasificacion === undefined || this.clasificacion === '') {
+        if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+          query = `Select * from DetalleFacturacionFull_View where c_codigo=${this.codigo} order by c_codigo, CodigoEstudio`;
+        }else {
+          query = `Select * from DetalleFacturacionFull_View where c_codigo=${this.codigo} and Fecha >= '${this.parseDate(this.fechaIni)}
+          ' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`; }
+      }else
+        if(this.fechaIni === null || this.fechaIni === undefined || this.fechaFin === null || this.fechaFin === undefined) {
+        query = `Select * from DetalleFacturacionFull_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}
+        ' order by c_codigo, CodigoEstudio`;
+      }else {
+        query = `Select * from DetalleFacturacionFull_View where c_codigo=${this.codigo} and c_Lineanegocio='${this.clasificacion}
+        ' and Fecha >= '${this.parseDate(this.fechaIni)}' and Fecha <= '${this.parseDate(this.fechaFin)}' order by c_codigo, CodigoEstudio`
+      }
+      this.conector.getSocios(query)
+      .subscribe(socios => {
+        socios = this.manipulaDatos(socios); // Función para formatear Datos
+        this.Socios = socios;
+      });
     }
-      console.log(query)
-     this.conector.getSocios(query)
-     .subscribe(socios => {
-      //console.dir(this.Socios);
-      socios=this.manipulaDatos(socios); //Función para formatear Datos
-      this.Socios = socios;
-
-
-
-    })
-     this.mostrar=true;
+    this.mostrar = true;
   }
+
   parseDate(fecha:Date):String{
     if(fecha.getDate().toString().length == 1){var dia = '0'+fecha.getDate();}
     else{var dia = fecha.getDate().toString()}

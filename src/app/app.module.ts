@@ -7,6 +7,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatInputModule} from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule, MatTableModule} from '@angular/material';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AppComponent } from './app.component';
 import { FormBusquedaComponent } from './form-busqueda/form-busqueda.component';
 import { ViewFacturaComponent } from './view-factura/view-factura.component';
@@ -30,7 +31,8 @@ import { ConectorGilService } from './conector-gil.service';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule
   ],
   providers: [ConectorGilService],
   bootstrap: [AppComponent]

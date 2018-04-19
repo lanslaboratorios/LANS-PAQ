@@ -36,6 +36,7 @@
         <mat-datepicker-toggle matSuffix [for]="fechaFinal"></mat-datepicker-toggle>
         <mat-datepicker #fechaFinal></mat-datepicker>
     </mat-form-field>
+    <mat-checkbox class="example-margin" [(ngModel)]="facturado">Incluir Facturados</mat-checkbox>
 </mat-grid-list>
 
 <button class="btnFormulario" *ngIf="disponible" type="button" (click)="getDatos()">Buscar</button>

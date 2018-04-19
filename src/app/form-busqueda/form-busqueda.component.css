@@ -26,3 +26,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
   background-color: #175e73;
   box-shadow: -3px 4px 4px rgba(0,0,0,0.0);
 }
+
+#checkbox{
+  padding-left: 10px;
+}
