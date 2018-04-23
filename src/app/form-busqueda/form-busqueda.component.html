@@ -19,6 +19,7 @@
   </ul>
 </div> -->
 
+
 <mat-grid-list cols="4" rowHeight="fit" *ngIf="disponible">
     <mat-form-field class="example-full-width">
         <input matInput placeholder="Código de Socio" [(ngModel)]="codigo">
@@ -42,9 +43,9 @@
 <button class="btnFormulario" *ngIf="disponible" type="button" (click)="getDatos()">Buscar</button>
 <button class="btnFormulario" *ngIf="!disponible" type="button" (click)="refVentana()">Nueva Busqueda</button>
 <button class="btnFormulario" *ngIf="!disponible" type="button" (click)="exportTableToCSV('datos.csv')">Descargar CSV</button>
+
 <!-- tabla -->
-
-
+<div id="loader"></div>
 <table *ngIf="mostrar">
 
   <thead>
@@ -65,6 +66,7 @@
   </thead>
 
     <tbody >
+      
       <tr *ngFor="let socio of Socios">
         <td>{{socio.c_codigo}}</td>
         <td>{{socio.c_nombre}}</td>

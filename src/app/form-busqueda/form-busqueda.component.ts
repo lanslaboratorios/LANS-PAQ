@@ -45,6 +45,7 @@ export class FormBusquedaComponent implements OnInit {
   }
 
   getDatos(): void {
+    
     this.condensado = [];
     this.Socios = [];
     this.disponible = false;
@@ -120,6 +121,7 @@ export class FormBusquedaComponent implements OnInit {
         this.Socios = socios;
       });
     }
+    document.getElementById('loader').style.display = 'block';
     this.mostrar = true;
   }
 
@@ -136,6 +138,7 @@ export class FormBusquedaComponent implements OnInit {
 
     this.detectarCoincidencias(socios);
     socios=this.condensado;
+    document.getElementById('loader').style.display = 'none';
     return socios
   }
 
