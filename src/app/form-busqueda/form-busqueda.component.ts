@@ -126,10 +126,12 @@ export class FormBusquedaComponent implements OnInit {
   }
 
   parseDate(fecha:Date):String{
-    if(fecha.getDate().toString().length == 1){var dia = '0'+fecha.getDate();}
+    /*if(fecha.getDate().toString().length == 1){var dia = '0'+fecha.getDate();}
     else{var dia = fecha.getDate().toString()}
     if(fecha.getMonth().toString().length == 1){var mes = '0'+(fecha.getMonth()+1);}
-    else{var mes = (fecha.getMonth()+1).toString()}
+    else{var mes = (fecha.getMonth()+1).toString()}*/
+    var dia = fecha.getDate().toString();
+    var mes = (fecha.getMonth()+1).toString();
     let fechaSQL=`${fecha.getFullYear()}-${mes}-${dia}`
     return fechaSQL;
   }
